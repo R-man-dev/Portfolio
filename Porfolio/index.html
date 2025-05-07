@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Imtiaz Ahmed Portfolio</title>
+
+    <!-- Google Font: Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!--jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+    <style>
+        :root {
+            --primary-color: #333;
+            --hover-color: #c0392b;
+            --font-family: 'Roboto', sans-serif;
+            --nav-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: #f4f4f4;
+        }
+
+        /* Navbar styles */
+        nav {
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            background-color: #f4f4f4;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 24%);
+        }
+
+        .nav-left,
+        .nav-center,
+        .nav-right {
+            gap: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-left i {
+            font-size: 1.2rem;
+            margin: 0 0.5rem;
+            color: var(--primary-color);
+            transition: color 0.3s;
+        }
+
+        .nav-left i:hover {
+            color: var(--hover-color);
+        }
+
+        .nav-center a {
+            margin: 0 1rem;
+            font-size: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-center a::before,
+        .nav-center a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: var(--hover-color);
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-center a::before {
+            top: -6px;
+        }
+
+        .nav-center a::after {
+            bottom: -6px;
+        }
+
+        .nav-center a:hover {
+            color: var(--hover-color);
+        }
+
+        .nav-center a:hover::before,
+        .nav-center a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            height: 500px;
+            background-color: #fff;
+            padding: 40px;
+            margin: 40px auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .left {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .left h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .left p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .buttons .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-right: 15px;
+            font-size: 1rem;
+            border-radius: 30px;
+            border: none;
+            text-decoration: none;
+            color: #fff;
+            background-color: var(--hover-color);
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(108, 109, 109, 0.166);
+        }
+
+        .buttons .btn:hover {
+            background-color: #f5f5dcdb;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px #f5f5dc(0, 86, 179, 0.3);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary {
+            background-color: #28a745;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background-color: #1e7e34;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(30, 126, 52, 0.3);
+        }
+
+        .right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-wrapper {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-container {
+            display: flex;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            padding: 40px;
+            gap: 40px;
+            margin: 0 auto 60px;
+            align-items: center;
+        }
+
+        .image-box {
+            position: relative;
+            width: 145px;
+            height: 267px;
+            border-radius: 2px;
+            overflow: visible;
+            background-color: #c0392b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #c0392b;
+            transform: rotate(1deg);
+
+        }
+
+
+
+        .profile-img {
+            width: 140px;
+            height: 274px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: -36px;
+        }
+
+        .about-text {
+            max-width: 700px;
+        }
+
+        .about-text h2 {
+            margin-top: 0;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .about-text p {
+            color: #555;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-right: 15px;
+            font-size: 1rem;
+            border-radius: 30px;
+            border: none;
+            text-decoration: none;
+            color: #fff;
+            background-color: var(--hover-color);
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(108, 109, 109, 0.166);
+        }
+
+        .buttons .btn:hover {
+            background-color: #f5f5dcdb;
+            transform: scale(1.05);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary {
+            background-color: #28a745;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background-color: #1e7e34;
+        }
+
+        .services-section {
+            padding: 60px 20px;
+            background-color: #f9fafb;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .section-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: rgb(27, 25, 25);
+            text-align: center;
+            position: relative;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease;
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title::after {
+            content: "";
+            width: 60px;
+            height: 4px;
+            background-color: rgb(37, 35, 35);
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 2px;
+            animation: growLine 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Line animation */
+        @keyframes growLine {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+
+            100% {
+                width: 60px;
+                opacity: 1;
+            }
+        }
+
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background-color: #fff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: #2563eb;
+            margin-bottom: 15px;
+            animation: iconPop 0.6s ease;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .service-card p {
+            color: #4b5563;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .service-card {
+            background-color: #fff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition:
+                transform 0.4s ease,
+                box-shadow 0.4s ease,
+                border 0.4s ease;
+            animation: fadeInUp 0.8s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border: 2px solid maroon;
+
+            box-shadow: 0 0 15px rgba(128, 0, 0, 0.5);
+
+            background-color: #fff;
+
+        }
+
+        .service-card:hover .service-icon {
+            color: maroon;
+            transform: scale(1.1);
+        }
+
+        .service-card:hover h3 {
+            color: maroon;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: maroon;
+            margin-bottom: 15px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1f2937;
+            transition: color 0.3s;
+        }
+
+        .service-card p {
+            color: #4b5563;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-left">
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+            <a href="#"><i class="fas fa-phone"></i></a>
+        </div>
+
+        <div class="nav-center">
+            <a href="#project" class="nav-link">Project</a>
+            <a href="#blog" class="nav-link">Blog</a>
+            <a href="#about" class="nav-link">About Me</a>
+
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="left">
+            <h1>Imtiaz Ahmed</h1>
+            <hr>
+            <p>
+                I'm a web developer skilled in front-end technologies. I focus on
+                creating user-friendly, responsive websites with clean code. Check out
+                my portfolio to see my work.
+            </p>
+            <div class="buttons">
+                <a href="#portfolio" class="btn">Portfolio</a>
+                <a href="#contact" class="btn btn-secondary">Hire Me</a>
+            </div>
+        </div>
+        <div class="right">
+            <div class="image-wrapper">
+                <img src="pic.jpg" alt="Imtiaz Ahmed" />
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="about-container fade-in-section">
+        <div class="image-box fade-in-section">
+            <img src="pic3.jpg" alt="About Me Image" class="profile-img fade-in-section" />
+        </div>
+        <div class="about-text">
+            <h2>About Me</h2>
+            <p>Hi, I’m a self-taught aspiring front-end web developer. I’m building my skills in HTML, CSS, JavaScript,
+                and DOM manipulation, and I’m passionate about creating clean, functional websites and apps.</p>
+            <p>I focus on hands-on practice and track my progress as I develop my expertise. My goal is to become a
+                professional developer and work on impactful projects.</p>
+            <p>Outside of coding, I have interests in health and personal improvement, and I love the challenge of
+                learning every day as I explore the world of web development.</p>
+
+            <div class="buttons fade-in-section">
+                <a href="#contact" class="btn fade-in-section">Hire Me</a>
+                <button id="downloadCvBtn" class="btn btn-secondary fade-in-section">Download CV</button>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="services-section fade-in-section">
+        <h2 class="section-title fade-in-section">My Services</h2>
+        <div class="services-container fade-in-section">
+            <div class="service-card fade-in-section">
+                <i class="fas fa-laptop-code service-icon fade-in-section"></i>
+                <h3>Responsive Web Design</h3>
+                <p>I create mobile-first, fully responsive websites that work flawlessly across all devices.</p>
+            </div>
+            <div class="service-card fade-in-section">
+                <i class="fas fa-pencil-ruler service-icon fade-in-section"></i>
+                <h3>UI/UX Prototyping</h3>
+                <p>Design clean and intuitive user interfaces using Figma and implement them in code.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-layer-group service-icon fade-in-section"></i>
+                <h3>Single Page Applications</h3>
+                <p>Build dynamic SPAs with React.js for a seamless and fast user experience.</p>
+            </div>
+            <div class="service-card fade-in-section">
+                <i class="fas fa-rocket service-icon fade-in-section"></i>
+                <h3>Website Optimization</h3>
+                <p>Improve website performance, SEO, and accessibility to ensure the best user experience.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!--JavaScript-->
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener("click", function (e) {
+                const targetId = this.getAttribute("href").substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    e.preventDefault();
+                    const offset = 60;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = window.scrollY + elementPosition - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        document.getElementById('downloadCvBtn').addEventListener('click', function () {
+            const link = document.createElement('a');
+            link.href = 'cv.pdf';
+            link.download = 'Imtiaz_Ahmed_CV.pdf';
+            link.click();
+        });
+    </script>
+
+    <!--Fade in scroll effet  -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll('.fade-in-section');
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    } else {
+
+                        entry.target.classList.remove('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px 200px 0px"
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+    </script>
+
+</body>
+
+</html>
